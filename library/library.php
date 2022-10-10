@@ -117,7 +117,7 @@ function tep_get_server_info($link = 'db_link')
 // ================================
 function redirect($url, $parameters = '')
 {
-    return "<script>window.location='" . $url . "" . $parameters . "'</script>";
+    header("Location: $url$parameters");
 }
 function alert($string)
 {
@@ -271,7 +271,7 @@ function msgHighlight($stat, $moduleTitle, $fadeOut = '')
             break;
         case "really365birthday_toomany":
             $msgTitle = "Birthday greetings like a spam.";
-            $msgContent = "You have multiple birthday greetings in different sending 'day'. Your customers will receive too many email and the possibility they mark your email as spam is high.";
+            $msgContent = "You have multiple birthday greetings in different sending 'day'. Your memberss will receive too many email and the possibility they mark your email as spam is high.";
             $msgHighlightBox = "failed";
             break;
         case "incomplete_form":

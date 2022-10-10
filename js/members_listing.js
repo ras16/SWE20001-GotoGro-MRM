@@ -1,14 +1,13 @@
 // DONE
 function go_add_user() {
     var data = {};
-    data.Members_name = $("#Members_name_a").val();
-    data.Members_contact = $("#Members_contact_a").val();
-    data.Members_email = $("#Members_email_a").val();
-    data.Members_address = $("#Members_address_a").val();
-    data.Members_password = $("#Members_password_a").val();
+    data.members_name = $("#members_name_a").val();
+    data.members_contact = $("#members_contact_a").val();
+    data.members_email = $("#members_email_a").val();
+    data.members_address = $("#members_address_a").val();
 
     // START - Check validation
-    if (passwordValidation(data.Members_password) == false | emailValidation(data.Members_email) == false | nameValidation(data.Members_name) == false) {
+    if (!(emailValidation(data.members_email) && nameValidation(data.members_name))) {
         return false;
     }
     // END - Check validation
@@ -33,8 +32,8 @@ function go_add_user() {
 // DONE
 function go_del() {
     var data = {};
-    data.Members_id = $("#Members_id_d").val();
-    data.Members_email = $("#Members_email_d").val();
+    data.members_id = $("#members_id_d").val();
+    data.members_email = $("#members_email_d").val();
 
     $.ajax({
         url: "functions/cl_go_del.php",
@@ -50,15 +49,15 @@ function go_del() {
 // DONE - go_modify
 function go_modify() {
     var data = {};
-    data.Members_id = $("#Members_id_m").val();
-    data.Members_name = $("#Members_name_m").val();
-    data.Members_contact = $("#Members_contact_m").val();
-    data.Members_email = $("#Members_email_m").val();
-    data.Members_address = $("#Members_address_m").val();
-    data.Members_status = $("#Members_status_m").val();
+    data.members_id = $("#members_id_m").val();
+    data.members_name = $("#members_name_m").val();
+    data.members_contact = $("#members_contact_m").val();
+    data.members_email = $("#members_email_m").val();
+    data.members_address = $("#members_address_m").val();
+    data.members_status = $("#members_status_m").val();
 
     // START - Check validation
-    if (emailValidation(data.Members_email) == false | nameValidation(data.Members_name) == false) {
+    if (emailValidation(data.members_email) == false | nameValidation(data.members_name) == false) {
         return false;
     }
     // END - Check validation
@@ -97,20 +96,6 @@ function emailValidation(email) {
 function emailFormat(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
-}
-
-function passwordValidation(password) {
-    if (password == "") {
-        $(".passwordErr").html("* Password required.");
-        return false;
-    }
-    if (password.length < 6) {
-        $(".passwordErr").html("* At least 6 characters.");
-        return false;
-    } else {
-        $(".passwordErr").html("");
-        return true;
-    }
 }
 
 function nameValidation(name) {

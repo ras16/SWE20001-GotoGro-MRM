@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.2/css/fontawesome.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- jquery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -83,7 +83,7 @@
 </head>
 
 <body>
-	<?php include '../../library/library.php'; ?>
+	<?php include 'library/library.php'; ?>
 	<?php
 	if (isset($_COOKIE["token"])) {
 		echo script("console.log('token [SET]')");

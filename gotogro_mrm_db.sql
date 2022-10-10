@@ -44,6 +44,20 @@ CREATE TABLE `employees` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Table structure for table `members`
+--
+
+CREATE TABLE `members` (
+  `members_id` int(11) NOT NULL,
+  `members_name` varchar(50) DEFAULT NULL,
+  `members_email` varchar(50) DEFAULT NULL,
+  `members_contact` varchar(50) DEFAULT NULL,
+  `members_address` varchar(150) DEFAULT NULL,
+  `members_status` int(1) DEFAULT NULL,
+  `members_dateCreated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Dumping data for table `employees`
 --
 
@@ -51,8 +65,7 @@ INSERT INTO `employees` (`emp_id`, `emp_name`, `emp_email`, `emp_password`, `emp
 (1, 'Manager', 'acl_9@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 9, 1, '2021-07-17 13:32:10'),
 (2, 'Site-management Staff', 'acl_2@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 2, 1, '2021-07-17 13:33:10'),
 (3, 'In-store Staff', 'acl_1@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 1, 1, '2021-07-17 13:35:04'),
-(4, 'Delivery Staff', 'acl_0@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 0, 1, '2021-07-17 13:35:30'),
-(5, 'Ali', 'ali@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 0, 1, '2021-07-17 13:36:39');
+(4, 'Delivery Staff', 'acl_0@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 0, 1, '2021-07-17 13:35:30');
 
 --
 -- Indexes for dumped tables
@@ -65,6 +78,12 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`emp_id`);
 
 --
+-- Indexes for table `customer`
+--
+ALTER TABLE `members`
+  ADD PRIMARY KEY (`members_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -73,3 +92,9 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `employees`
   MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `members`
+  MODIFY `members_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;

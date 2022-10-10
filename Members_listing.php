@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -319,10 +319,10 @@
 	}
 	?>
 	<?php
-	// Reload Members Listing
+	// Reload members Listing
 	function reload()
 	{
-		echo script('$("#Members_listing").load("ajax/Members_listing_ajax.php");');
+		echo script('$("#members_listing").load("ajax/members_listing_ajax.php");');
 	}
 	?>
 
@@ -333,10 +333,10 @@
 				<div class="table-title">
 					<div class="row">
 						<div class="col-sm-6">
-							<h2>Manage <b>Members</b></h2>
+							<h2>Manage <b>members</b></h2>
 						</div>
 						<div class="col-sm-6">
-							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
+							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Member</span></a>
 							<a onclick="reload()" class="btn btn-info" data-toggle="modal"><i class="material-icons">&#xe5d5;</i> <span>Refresh</span></a>
 						</div>
 						<br><br><br>
@@ -349,7 +349,7 @@
 					</div>
 				</div>
 				<!-- load table -->
-				<div id="Members_listing"></div>
+				<div id="members_listing"></div>
 			</div>
 		</div>
 	</div>
@@ -360,7 +360,7 @@
 			<div class="modal-content">
 				<div>
 					<div class="modal-header">
-						<h4 class="modal-title">Add New User</h4>
+						<h4 class="modal-title">Add New Member</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
@@ -372,31 +372,26 @@
 						</div>
 						<div class="form-group">
 							<label>Name</label>
-							<input type="text" class="form-control" id="Members_name_a">
+							<input type="text" class="form-control" id="members_name_a">
 							<span class="errMsg nameErr"></span>
 						</div>
 						<div class="form-group">
 							<label>Contact</label>
-							<input type="text" class="form-control" id="Members_contact_a">
+							<input type="text" class="form-control" id="members_contact_a">
 						</div>
 						<div class="form-group">
 							<label>Email</label>
-							<input type="text" class="form-control" id="Members_email_a">
+							<input type="text" class="form-control" id="members_email_a">
 							<span class="errMsg emailErr"></span>
 						</div>
 						<div class="form-group">
-							<label>Password</label>
-							<input type="password" class="form-control" id="Members_password_a">
-							<span class="errMsg passwordErr"></span>
-						</div>
-						<div class="form-group">
 							<label>Address</label>
-							<textarea class="form-control" id="Members_address_a"></textarea>
+							<textarea class="form-control" id="members_address_a"></textarea>
 						</div>
 						<div class="form-group">
 							<label>Status</label>
 							<br>
-							<select id="Members_status_a" style="width:335px;height:40px">
+							<select id="members_status_a" style="width:335px;height:40px">
 								<option value="1">Active</option>
 							</select>
 						</div>
@@ -422,35 +417,35 @@
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label>Members ID</label>
+							<label>members ID</label>
 							<div class="cursor-not-allowed">
-								<input type="text" id="Members_id_m" class="form-control get_id avoid-clicks">
+								<input type="text" id="members_id_m" class="form-control get_id avoid-clicks">
 							</div>
 						</div>
 						<div class="form-group">
 							<label>Name</label>
-							<input type="text" id="Members_name_m" class="form-control get_name">
+							<input type="text" id="members_name_m" class="form-control get_name">
 							<span class="errMsg nameErr"></span>
 						</div>
 						<div class="form-group">
 							<label>Contact</label>
-							<input type="text" id="Members_contact_m" class="form-control get_contact">
+							<input type="text" id="members_contact_m" class="form-control get_contact">
 						</div>
 						<div class="form-group">
 							<label>Email</label>
 							<div class="cursor-not-allowed">
-								<input type="text" id="Members_email_m" class="form-control get_email avoid-clicks">
+								<input type="text" id="members_email_m" class="form-control get_email avoid-clicks">
 							</div>
 							<span class="errMsg emailErr"></span>
 						</div>
 						<div class="form-group">
 							<label>Address</label>
-							<textarea id="Members_address_m" class="form-control get_address"></textarea>
+							<textarea id="members_address_m" class="form-control get_address"></textarea>
 						</div>
 						<div class="form-group">
 							<label>Status</label>
 							<br>
-							<select class="get_status" id="Members_status_m" style="width:335px;height:40px">
+							<select class="get_status" id="members_status_m" style="width:335px;height:40px">
 								<option value="1">Active</option>
 								<option value="0">Inactivated</option>
 								<option value="-1">Banned</option>
@@ -479,8 +474,8 @@
 					</div>
 					<div class="modal-body">
 						<p>Are you sure you want to delete <b class="get_email"></b>?</p>
-						<input type="hidden" id="Members_id_d" class="get_id">
-						<input type="hidden" id="Members_email_d" class="get_email">
+						<input type="hidden" id="members_id_d" class="get_id">
+						<input type="hidden" id="members_email_d" class="get_email">
 						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
 					<div class="modal-footer">
@@ -493,7 +488,7 @@
 	</div>
 
 
-	<script src="js/Members.listing.js"></script>
+	<script src="js/members_listing.js"></script>
 
 	<!-- Edit and Del get_value setup -->
 	<script>
@@ -535,12 +530,12 @@
 	<script>
 		// Auto-load
 		$(document).ready(function() {
-			// Load Members Listing
-			$("#Members_listing").load("ajax/Members_listing_ajax.php");
+			// Load members Listing
+			$("#members_listing").load("ajax/members_listing_ajax.php");
 		});
 		// Reload
 		function reload() {
-			$("#Members_listing").load("ajax/Members_listing_ajax.php");
+			$("#members_listing").load("ajax/members_listing_ajax.php");
 		}
 	</script>
 </body>

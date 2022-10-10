@@ -15,15 +15,15 @@
     <tbody id="myTable">
         <?php
         $cnt = 0;
-        $qryRow = tep_query("SELECT * FROM Members ORDER BY Members_id ASC");
+        $qryRow = tep_query("SELECT * FROM members ORDER BY members_id ASC");
         while ($infoRow = tep_fetch_object($qryRow)) {
             $cnt++;
-            $id = $infoRow->Members_id;
-            $name = $infoRow->Members_name;
-            $contact = $infoRow->Members_contact;
-            $email = $infoRow->Members_email;
-            $address = $infoRow->Members_address;
-            $status = $infoRow->Members_status;
+            $id = $infoRow->members_id;
+            $name = $infoRow->members_name;
+            $contact = $infoRow->members_contact;
+            $email = $infoRow->members_email;
+            $address = $infoRow->members_address;
+            $status = $infoRow->members_status;
 
             echo '
             <tr>
