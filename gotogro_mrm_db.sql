@@ -98,3 +98,16 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `members`
   MODIFY `members_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+CREATE TABLE `inventory` (
+  `inv_id` int(11) NOT NULL,
+  `inv_title` varchar(50) DEFAULT NULL,
+  `inv_image` varchar(255) DEFAULT NULL,
+  `inv_description` text DEFAULT NULL,
+  `inv_price` decimal(10,2) DEFAULT NULL,
+  `best_seller` int(1) NOT NULL,
+  `inv_status` int(1) DEFAULT NULL,
+  `inv_dateCreated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `inv`
+  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
