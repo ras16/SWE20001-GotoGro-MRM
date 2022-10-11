@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>inventory - Komalah Florist</title>
+    <title>inventory - GotoGro-MRM</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -249,7 +249,7 @@
         if ($getuser->emp_position == 2) {
             echo redirect("site_inventory.php");
         } else {
-            echo redirect("sales.php");
+            echo redirect("Sales.php");
         }
     }
     ?>
@@ -274,22 +274,22 @@
                     $fileDestination = "../../images/" . $fileNameNew;
                     // START - Upload 
                     move_uploaded_file($fileTmpName, $fileDestination);
-                    tep_query("INSERT INTO iventory(
-                        iventory_title,
-                        iventory_image,
-                        iventory_description,
-                        iventory_price,
+                    tep_query("INSERT INTO inventory(
+                        inv_title,
+                        inv_image,
+                        inv_description,
+                        inv_price,
                         best_seller,
-                        iventory_status
+                        inv_status
                     )VALUES(
-                        '" . $_POST["iventory_title"] . "',
+                        '" . $_POST["inv_title"] . "',
                         '" . $fileNameNew . "',
-                        '" . $_POST["iventory_description"] . "',
-                        '" . $_POST["iventory_price"] . "',
+                        '" . $_POST["inv_description"] . "',
+                        '" . $_POST["inv_price"] . "',
                         '" . $_POST["best_seller"] . "',
-                        '" . $_POST["iventory_status"] . "'
+                        '" . $_POST["inv_status"] . "'
                     );");
-                    echo redirect("site_iventory.php?add_new=success");
+                    echo redirect("site_inv.php?add_new=success");
                 } else {
                     echo alert("Your file is too big.");
                 }
@@ -303,13 +303,13 @@
 
     if (isset($_POST["go_modify"])) {
         if ($_FILES['file']['size'] == 0) {
-            tep_query("UPDATE iventory SET
-            iventory_title = '" . $_POST["iventory_title"] . "',
-            iventory_description = '" . $_POST["iventory_description"] . "',
-            iventory_price = '" . $_POST["iventory_price"] . "',
+            tep_query("UPDATE inventory SET
+            inv_title = '" . $_POST["inv_title"] . "',
+            inv_description = '" . $_POST["inv_description"] . "',
+            inv_price = '" . $_POST["inv_price"] . "',
             best_seller = '" . $_POST["best_seller"] . "',
-            iventory_status = '" . $_POST["inventory_status"] . "'
-            WHERE iventory_id = '" . $_POST["inventory_id"] . "'
+            inv_status = '" . $_POST["inv_status"] . "'
+            WHERE inv_id = '" . $_POST["inv_id"] . "'
             ");
         } else {
             $file = $_FILES["file"];
@@ -332,15 +332,15 @@
                         // START - Upload 
                         move_uploaded_file($fileTmpName, $fileDestination);
                         tep_query("UPDATE inventory SET
-                        inventory_title = '" . $_POST["inventory_title"] . "',
-                        inventory_image = '" . $fileNameNew . "',
-                        inventory_description = '" . $_POST["inventory_description"] . "',
-                        inventory_price = '" . $_POST["inventory_price"] . "',
+                        inv_title = '" . $_POST["inv_title"] . "',
+                        inv_image = '" . $fileNameNew . "',
+                        inv_description = '" . $_POST["inv_description"] . "',
+                        inv_price = '" . $_POST["inv_price"] . "',
                         best_seller = '" . $_POST["best_seller"] . "',
-                        inventory_status = '" . $_POST["inventory_status"] . "'
-                        WHERE inventory_id = '" . $_POST["inventory_id"] . "'
+                        inv_status = '" . $_POST["inv_status"] . "'
+                        WHERE inv_id = '" . $_POST["inv_id"] . "'
                         ");
-                        echo redirect("site_inventory.php?modify=success");
+                        echo redirect("site_inv.php?modify=success");
                     } else {
                         echo alert("Your file is too big.");
                     }
@@ -351,13 +351,13 @@
                 echo alert("You cannot upload files of this type.");
             }
         }
-        echo redirect("site_inventory.php?modify=success");
+        echo redirect("site_inv.php?modify=success");
     }
 
     if (isset($_POST["go_del"])) {
         tep_query("UPDATE inventory SET
-        inventory_status = -1
-        WHERE inventory_id = '" . $_POST["emp_id_d"] . "'");
+        inv_status = -1
+        WHERE inv_id = '" . $_POST["emp_id_d"] . "'");
     }
     ?>
 
@@ -392,7 +392,7 @@
                     </div>
                 </div>
                 <div class="col-sm-5">
-                    <a href="#add_inventory" class="btn btn-info" data-toggle="modal"> <span>Add inventory</span></a>
+                    <a href="#add_inv" class="btn btn-info" data-toggle="modal"> <span>Add inventory</span></a>
                 </div>
                 <br>
                 <table class="table table-striped table-hover">
@@ -412,16 +412,16 @@
                         <?php
                         $cnt = 0;
 
-                        $qryRow = tep_query("SELECT * FROM inventory WHERE inventory_status >= 0 ORDER BY inventory_id ASC");
+                        $qryRow = tep_query("SELECT * FROM inventory WHERE inv_status >= 0 ORDER BY inv_id ASC");
                         while ($infoRow = tep_fetch_object($qryRow)) {
                             $cnt++;
-                            $id = $infoRow->inventory_id;
-                            $title = $infoRow->inventory_title;
-                            $image = $infoRow->inventory_image;
-                            $desc = $infoRow->inventory_description;
-                            $price = $infoRow->inventory_price;
+                            $id = $infoRow->inv_id;
+                            $title = $infoRow->inv_title;
+                            $image = $infoRow->inv_image;
+                            $desc = $infoRow->inv_description;
+                            $price = $infoRow->inv_price;
                             $best_seller = $infoRow->best_seller;
-                            $status = $infoRow->inventory_status;
+                            $status = $infoRow->inv_status;
 
                             if ($status == 1) {
                                 echo '<tr data-status="active">';
@@ -430,7 +430,7 @@
                             }
                             echo '
                             <td>' . $cnt . '</td>
-                            <td><a href="http://localhost:8080/capstone/capstone/sinventory.php?inventory_id=' . $id . '" target="_blank"><img src="../../images/' . $image . '" class="flower" alt="Flower" style="width:40px;height:40px"></td>
+                            <td><img src="../../images/' . $image . '" class="flower" alt="Flower" style="width:40px;height:40px"></td>
                             <td>' . $title . '</td>
                             <td>RM ' . $price . '</td>
                             <td>' . $desc . '</td>';
@@ -447,7 +447,7 @@
                             }
                             echo '
                             <td>
-                            <a href="#edit_inventory" class="edit" data-toggle="modal">
+                            <a href="#edit_inv" class="edit" data-toggle="modal">
                             <i class="material-icons get_edit" data-toggle="modal" title="Edit"
                             data-id="' . $id . '"
                             data-title="' . $title . '"
@@ -460,7 +460,7 @@
                             </i>
                             </a>
 
-                            <a href="#delete_inventory" class="delete" data-toggle="modal">
+                            <a href="#delete_inv" class="delete" data-toggle="modal">
                             <i class="material-icons get_del" data-toggle="modal" title="Delete"
                             data-id="' . $id . '"
                             data-title="' . $title . '"
@@ -479,7 +479,7 @@
     </div>
 
     <!-- Add Modal HTML -->
-    <div id="add_inventory" class="modal fade">
+    <div id="add_inv" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST" enctype="multipart/form-data">
@@ -494,11 +494,11 @@
                         </div>
                         <div class="form-group">
                             <label>Model</label>
-                            <input type="text" class="form-control" name="inventory_title">
+                            <input type="text" class="form-control" name="inv_title">
                         </div>
                         <div class="form-group">
                             <label>Price</label>
-                            <input type="text" class="form-control" name="inventory_price">
+                            <input type="text" class="form-control" name="inv_price">
                         </div>
                         <div class="form-group">
                             <label>Best Seller</label>
@@ -511,7 +511,7 @@
                         <div class="form-group">
                             <label>Status</label>
                             <br>
-                            <select name="inventory_status" style="width:335px;height:40px">
+                            <select name="inv_status" style="width:335px;height:40px">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
@@ -521,7 +521,7 @@
                         <br>
                         <div class="form-group">
                             <label>inventory Details</label>
-                            <textarea class="form-control" name="inventory_description" required></textarea>
+                            <textarea class="form-control" name="inv_description" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -534,7 +534,7 @@
     </div>
 
     <!-- Edit Modal HTML -->
-    <div id="edit_inventory" class="modal fade">
+    <div id="edit_inv" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST" enctype="multipart/form-data">
@@ -544,17 +544,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <input type="hidden" name="inventory_id" class="get_id">
+                            <input type="hidden" name="inv_id" class="get_id">
                             <label>Image</label>
                             <input type="file" class="form-control" style="height:45px" name="file" />
                         </div>
                         <div class="form-group">
                             <label>Model</label>
-                            <input type="text" class="form-control get_title" name="inventory_title" required>
+                            <input type="text" class="form-control get_title" name="inv_title" required>
                         </div>
                         <div class="form-group">
                             <label>Price</label>
-                            <input type="text" class="form-control get_price" name="inventory_price" required>
+                            <input type="text" class="form-control get_price" name="inv_price" required>
                         </div>
                         <div class="form-group">
                             <label>Best Seller</label>
@@ -567,7 +567,7 @@
                         <div class="form-group">
                             <label>Status</label>
                             <br>
-                            <select name="inventory_status" class="get_status" style="width:335px;height:40px">
+                            <select name="inv_status" class="get_status" style="width:335px;height:40px">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
@@ -577,7 +577,7 @@
                         <br>
                         <div class="form-group">
                             <label>inventory Details</label>
-                            <textarea class="form-control get_desc" name="inventory_description" required></textarea>
+                            <textarea class="form-control get_desc" name="inv_description" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -590,7 +590,7 @@
     </div>
 
     <!-- Delete Modal HTML -->
-    <div id="delete_inventory" class="modal fade">
+    <div id="delete_inv" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST">
