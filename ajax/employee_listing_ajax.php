@@ -3,7 +3,7 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>No</th>
+            <th>Employee ID</th>
             <th>Name</th>
             <th>Contact</th>
             <th>Email</th>
@@ -14,10 +14,8 @@
     </thead>
     <tbody id="myTable">
         <?php
-        $cnt = 0;
         $qryRow = tep_query("SELECT * FROM employees ORDER BY emp_id ASC");
         while ($infoRow = tep_fetch_object($qryRow)) {
-            $cnt++;
             $id = $infoRow->emp_id;
             $name = $infoRow->emp_name;
             $contact = $infoRow->emp_contact;
@@ -27,7 +25,7 @@
 
             echo '
             <tr>
-            <td>' . $cnt . '</td>
+            <td>' . $id . '</td>
             <td>' . $name . '</td>
             <td>' . $contact . '</td>
             <td>' . $email . '</td>

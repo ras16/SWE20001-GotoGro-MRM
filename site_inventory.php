@@ -397,7 +397,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th>Inventory ID</th>
                             <th>Image</th>
                             <th>Title</th>
                             <th>Price</th>
@@ -409,11 +409,8 @@
                     </thead>
                     <tbody id="myTable">
                         <?php
-                        $cnt = 0;
-
                         $qryRow = tep_query("SELECT * FROM inventory WHERE inv_status >= 0 ORDER BY inv_id ASC");
                         while ($infoRow = tep_fetch_object($qryRow)) {
-                            $cnt++;
                             $id = $infoRow->inv_id;
                             $title = $infoRow->inv_title;
                             $image = $infoRow->inv_image;
@@ -428,7 +425,7 @@
                                 echo '<tr data-status="inactive">';
                             }
                             echo '
-                            <td>' . $cnt . '</td>
+                            <td>' . $id . '</td>
                             <td><img src="images/' . $image . '" alt="Image" style="width:40px;height:40px"></td>
                             <td>' . $title . '</td>
                             <td>RM ' . $price . '</td>

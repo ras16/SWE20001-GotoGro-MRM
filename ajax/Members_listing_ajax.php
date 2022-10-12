@@ -14,10 +14,8 @@
     </thead>
     <tbody id="myTable">
         <?php
-        $cnt = 0;
         $qryRow = tep_query("SELECT * FROM members ORDER BY members_id ASC");
         while ($infoRow = tep_fetch_object($qryRow)) {
-            $cnt++;
             $id = $infoRow->members_id;
             $name = $infoRow->members_name;
             $contact = $infoRow->members_contact;
@@ -27,7 +25,7 @@
 
             echo '
             <tr>
-            <td><a href="#">' . $cnt . '</a></td>
+            <td><a href="#">' . $id . '</a></td>
             <td>' . $name . '</td>
             <td>' . $contact . '</td>
             <td>' . $email . '</td>

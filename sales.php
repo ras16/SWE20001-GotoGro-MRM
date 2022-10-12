@@ -396,7 +396,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th>Sales ID</th>
                             <th>Member Email</th>
                             <th>Item</th>
                             <th>Quantity</th>
@@ -409,11 +409,8 @@
                     </thead>
                     <tbody id="myTable">
                         <?php
-                        $cnt = 0;
-
-                        $qryRow = tep_query("SELECT * FROM sales ORDER BY sales_id DESC");
+                        $qryRow = tep_query("SELECT * FROM sales ORDER BY sales_id");
                         while ($infoRow = tep_fetch_object($qryRow)) {
-                            $cnt++;
                             $member = tep_fetch_object(tep_query("SELECT * FROM members WHERE members_id = '" . $infoRow->member_id . "'"));
                             $inv = tep_fetch_object(tep_query("SELECT * FROM inventory WHERE inv_id = {$infoRow->inv_id}"));
                             
@@ -433,7 +430,7 @@
                                 echo '<tr data-status="cancel">';
                             }
                             echo '
-                            <td>' . $cnt . '</td>
+                            <td>' . $infoRow->sales_id . '</td>
                             <td><a href="#member_info" class="get_member" data-toggle="modal"
                             data-id="' . $member->members_id . '"
                             data-name="' . $member->members_name . '"
