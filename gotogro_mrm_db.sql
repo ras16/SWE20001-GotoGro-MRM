@@ -68,6 +68,40 @@ INSERT INTO `employees` (`emp_id`, `emp_name`, `emp_email`, `emp_password`, `emp
 (4, 'Delivery Staff', 'deliverystaff@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 0, 1, '2021-07-17 13:35:30');
 
 --
+-- Table structure for table `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `inv_id` int(11) NOT NULL,
+  `inv_title` varchar(50) DEFAULT NULL,
+  `inv_image` varchar(255) DEFAULT NULL,
+  `inv_description` text DEFAULT NULL,
+  `inv_price` decimal(10,2) DEFAULT NULL,
+  `best_seller` int(1) NOT NULL,
+  `inv_status` int(1) DEFAULT NULL,
+  `inv_dateCreated` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `sales`
+--
+
+CREATE TABLE `sales` (
+  `sales_id` int(11) NOT NULL,
+  `inv_id` int(11) NOT NULL,
+  `sales_qty` decimal(10,2) DEFAULT NULL,
+  `sales_pickupMethod` int(1) DEFAULT NULL COMMENT '0=pickup 1=delivery',
+  `sales_receipt` text DEFAULT NULL,
+  `preffered_date` varchar(11) DEFAULT NULL,
+  `preffered_time` varchar(11) DEFAULT NULL,
+  `shipment_date` text NOT NULL,
+  `sales_status` int(1) NOT NULL DEFAULT 0,
+  `sales_dateCreated` datetime DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `emp_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -98,31 +132,9 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `members`
   MODIFY `members_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-CREATE TABLE `inventory` (
-  `inv_id` int(11) NOT NULL,
-  `inv_title` varchar(50) DEFAULT NULL,
-  `inv_image` varchar(255) DEFAULT NULL,
-  `inv_description` text DEFAULT NULL,
-  `inv_price` decimal(10,2) DEFAULT NULL,
-  `best_seller` int(1) NOT NULL,
-  `inv_status` int(1) DEFAULT NULL,
-  `inv_dateCreated` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `inv`
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `inventory`
   MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-  
-  CREATE TABLE `sales` (
-  `sales_id` int(11) NOT NULL,
-  `item_idList` varchar(255) DEFAULT NULL,
-  `sales_totalPrice` decimal(10,2) DEFAULT NULL,
-  `sales_pickupMethod` int(1) DEFAULT NULL COMMENT '0=pickup 1=delivery',
-  `sales_receipt` text DEFAULT NULL,
-  `preffered_date` varchar(11) DEFAULT NULL,
-  `preffered_time` varchar(11) DEFAULT NULL,
-  `shipment_date` text NOT NULL,
-  `sales_status` int(1) NOT NULL DEFAULT 0,
-  `sales_dateCreated` datetime DEFAULT NULL,
-  `member_id` int(11) DEFAULT NULL,
-  `emp_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
