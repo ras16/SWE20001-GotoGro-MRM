@@ -1,7 +1,5 @@
 <?php include 'library/library.php';
 
-header('Content-Type: application/json');
-
 if (isset($_GET["emp_email"])) {
     $infoRow = tep_fetch_object(tep_query("SELECT * FROM employees WHERE emp_email = '" . $_GET["emp_email"] . "'"));
     if ($infoRow->emp_status == 1) {
@@ -19,6 +17,7 @@ if (isset($_GET["emp_email"])) {
     setcookie("token", $infoRow->emp_id, time() - (86400 * 365), "/");
     echo header("location: login.php");
 } else {
+    header('Content-Type: application/json');
     $infoRow = tep_fetch_object(tep_query("SELECT * FROM employees WHERE emp_email = '" . $_POST["emp_email"] . "' AND emp_password = '" . md5($_POST["emp_password"]) . "'"));
 
     if (!isset($infoRow->emp_id)) {
