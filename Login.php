@@ -98,7 +98,7 @@
 	?>
 
 	<div class="login">
-		<h1>Admin Login</h1>
+		<h1>GotoGro Login</h1>
 		<div>
 			<label for="email">
 				<i class="fas fa-envelope "></i>
