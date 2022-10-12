@@ -374,6 +374,9 @@
                                 <label class="btn btn-primary">
                                     <input type="radio" name="status" value="completed"> Completed
                                 </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" name="status" value="done"> Delivered
+                                </label>
                                 <label class="btn btn-warning">
                                     <input type="radio" name="status" value="pending"> Pending
                                 </label>

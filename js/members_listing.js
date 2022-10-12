@@ -5,6 +5,7 @@ function go_add_user() {
     data.members_contact = $("#members_contact_a").val();
     data.members_email = $("#members_email_a").val();
     data.members_address = $("#members_address_a").val();
+    data.members_status = $("#members_status_a").val();
 
     // START - Check validation
     if (!(emailValidation(data.members_email) && nameValidation(data.members_name))) {

@@ -18,7 +18,7 @@ if (!isset($infoRow->member_id)) {
         '" . $_POST["members_contact"] . "',
         '" . $_POST["members_email"] . "',
         '" . $_POST["members_address"] . "',
-        1,
+        " . $_POST["members_status"] . ",
         now()
     )");
     echo json_encode(

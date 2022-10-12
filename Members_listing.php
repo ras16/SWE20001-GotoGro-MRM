@@ -335,7 +335,7 @@
 				<div class="table-title">
 					<div class="row">
 						<div class="col-sm-6">
-							<h2>Manage <b>members</b></h2>
+							<h2>Manage <b>Members</b></h2>
 						</div>
 						<div class="col-sm-6">
 							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Member</span></a>
@@ -395,6 +395,9 @@
 							<br>
 							<select id="members_status_a" style="width:335px;height:40px">
 								<option value="1">Active</option>
+								<option value="0">Inactivated</option>
+								<option value="-1">Banned</option>
+								<option value="-2">Deactived</option>
 							</select>
 						</div>
 
