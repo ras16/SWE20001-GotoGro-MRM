@@ -273,6 +273,32 @@
       <span class="link_name"><?= $getuser->emp_email ?></span>
     </div>
     <ul class="nav-links">
+      <?php if ($getuser->emp_position >= 0 && $getuser->emp_position != 2) { ?>
+        <li>
+          <div class="iocn-link">
+            <a href="sales.php">
+              <i class='fa fa-list'></i>
+              <span class="link_name">Sales</span>
+            </a>
+          </div>
+        </li>
+      <?php } ?>
+
+      <?php if ($getuser->emp_position >= 2) { ?>
+        <li>
+          <div class="iocn-link">
+            <a href="#">
+              <i class='fa fa-tag'></i>
+              <span class="link_name">Site Preferences</span>
+            </a>
+            <i class='bx bxs-chevron-down arrow'></i>
+          </div>
+          <ul class="sub-menu">
+            <li><a href="site_inventory.php">Inventory</a></li>
+          </ul>
+        </li>
+      <?php } ?>
+      
       <?php if ($getuser->emp_position >= 9) { ?>
         <li>
           <div class="iocn-link">

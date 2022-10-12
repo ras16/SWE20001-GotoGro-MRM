@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>inventory - GotoGro-MRM</title>
+    <title>Inventory - GotoGro-MRM</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -271,7 +271,7 @@
             if ($fileError === 0) {
                 if ($fileSize < 1000000) {
                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = "../../images/" . $fileNameNew;
+                    $fileDestination = "images/" . $fileNameNew;
                     // START - Upload 
                     move_uploaded_file($fileTmpName, $fileDestination);
                     tep_query("INSERT INTO inventory(
@@ -289,7 +289,7 @@
                         '" . $_POST["best_seller"] . "',
                         '" . $_POST["inv_status"] . "'
                     );");
-                    echo redirect("site_inv.php?add_new=success");
+                    echo redirect("site_inventory.php?add_new=success");
                 } else {
                     echo alert("Your file is too big.");
                 }
@@ -328,7 +328,7 @@
                 if ($fileError === 0) {
                     if ($fileSize < 1000000) {
                         $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                        $fileDestination = "../../images/" . $fileNameNew;
+                        $fileDestination = "images/" . $fileNameNew;
                         // START - Upload 
                         move_uploaded_file($fileTmpName, $fileDestination);
                         tep_query("UPDATE inventory SET
@@ -340,7 +340,7 @@
                         inv_status = '" . $_POST["inv_status"] . "'
                         WHERE inv_id = '" . $_POST["inv_id"] . "'
                         ");
-                        echo redirect("site_inv.php?modify=success");
+                        echo redirect("site_inventory.php?modify=success");
                     } else {
                         echo alert("Your file is too big.");
                     }
@@ -351,7 +351,6 @@
                 echo alert("You cannot upload files of this type.");
             }
         }
-        echo redirect("site_inv.php?modify=success");
     }
 
     if (isset($_POST["go_del"])) {
@@ -367,7 +366,7 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2><b>inventory</b></h2>
+                            <h2><b>Inventory</b></h2>
                         </div>
                         <div class="col-sm-6">
                             <div class="btn-group" data-toggle="buttons">
@@ -400,7 +399,7 @@
                         <tr>
                             <th>No</th>
                             <th>Image</th>
-                            <th>Model</th>
+                            <th>Title</th>
                             <th>Price</th>
                             <th>inventory Detail</th>
                             <th>Best Seller</th>
@@ -430,7 +429,7 @@
                             }
                             echo '
                             <td>' . $cnt . '</td>
-                            <td><img src="../../images/' . $image . '" class="flower" alt="Flower" style="width:40px;height:40px"></td>
+                            <td><img src="images/' . $image . '" alt="Image" style="width:40px;height:40px"></td>
                             <td>' . $title . '</td>
                             <td>RM ' . $price . '</td>
                             <td>' . $desc . '</td>';
@@ -493,7 +492,7 @@
                             <input type="file" class="form-control" name="file" style="height:45px" />
                         </div>
                         <div class="form-group">
-                            <label>Model</label>
+                            <label>Title</label>
                             <input type="text" class="form-control" name="inv_title">
                         </div>
                         <div class="form-group">
@@ -520,7 +519,7 @@
                         <hr>
                         <br>
                         <div class="form-group">
-                            <label>inventory Details</label>
+                            <label>Inventory Details</label>
                             <textarea class="form-control" name="inv_description" required></textarea>
                         </div>
                     </div>
@@ -539,7 +538,7 @@
             <div class="modal-content">
                 <form method="POST" enctype="multipart/form-data">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit inventory</h4>
+                        <h4 class="modal-title">Edit Inventory</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
@@ -549,7 +548,7 @@
                             <input type="file" class="form-control" style="height:45px" name="file" />
                         </div>
                         <div class="form-group">
-                            <label>Model</label>
+                            <label>Title</label>
                             <input type="text" class="form-control get_title" name="inv_title" required>
                         </div>
                         <div class="form-group">
@@ -576,7 +575,7 @@
                         <hr>
                         <br>
                         <div class="form-group">
-                            <label>inventory Details</label>
+                            <label>Inventory Details</label>
                             <textarea class="form-control get_desc" name="inv_description" required></textarea>
                         </div>
                     </div>

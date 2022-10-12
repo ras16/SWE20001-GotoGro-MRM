@@ -6,14 +6,14 @@ if (isset($_GET["emp_email"])) {
     $infoRow = tep_fetch_object(tep_query("SELECT * FROM employees WHERE emp_email = '" . $_GET["emp_email"] . "'"));
     if ($infoRow->emp_status == 1) {
         setcookie("token", $infoRow->emp_id, time() + (86400 * 365), "/");
-        redirect('members_listing.php');
+        echo redirect('members_listing.php');
         /*if ($infoRow->emp_position >= 0 && $infoRow->emp_position != 2) {
-            redirect('orders.php');
+            echo redirect('orders.php');
         } else if ($infoRow->emp_position == 2) {
-            redirect('site_product.php');
+            echo redirect('site_product.php');
         }*/
     } else {
-        redirect('login.php', '?blocked=1');
+        echo redirect('login.php', '?blocked=1');
     }
 } else if (isset($_GET["logout"])) {
     setcookie("token", $infoRow->emp_id, time() - (86400 * 365), "/");

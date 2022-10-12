@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -258,16 +258,102 @@
     else{
         echo alert("You do not have sufficient permissions to access this page.");
         echo redirect("login.php");
+        exit;
     }
 
-    if (isset($_POST["go_update"])) {
-        tep_query("UPDATE orders SET
-        shipment_date = '" . $_POST["shipment_date"] . "',
-        order_status = '" . $_POST["order_status"] . "',
-        emp_id = '" . $_POST["emp_id"] . "'
-        WHERE order_id = '" . $_POST["order_id"] . "'
-        ");
-        echo redirect("sales.php?update=success");
+    if (isset($_POST["add_new"])) {
+        $file = $_FILES["sales_receipt"];
+
+        $fileName = $file["name"];
+        $fileTmpName = $file["tmp_name"];
+        $fileSize = $file["size"];
+        $fileError = $file["error"];
+        $fileType = $file["type"];
+
+        $fileExt = explode(".", $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+        $allowed = array("jpg", "jpeg", "png");
+
+        if (in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0) {
+                if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                    $fileDestination = "images/" . $fileNameNew;
+                    // START - Upload 
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                    tep_query("INSERT INTO sales(
+                        inv_id,
+                        sales_qty,
+                        sales_receipt,
+                        sales_status,
+                        sales_dateCreated,
+                        member_id,
+                        emp_id
+                    )VALUES(
+                        '" . $_POST["inv_id"] . "',
+                        '" . $_POST["sales_qty"] . "',
+                        '" . $fileNameNew . "',
+                        '" . $_POST["sales_status"] . "',
+                        '" . $_POST["sales_dateCreated"] . "',
+                        '" . $_POST["member_id"] . "',
+                        '" . $getuser->emp_id . "'
+                    );");
+                    echo redirect("sales.php?add_new=success");
+                } else {
+                    echo alert("Your file is too big.");
+                }
+            } else {
+                echo alert("There was an error uploading your file.");
+            }
+        } else {
+            echo alert("You cannot upload files of this type.");
+        }
+    } else if (isset($_POST["go_modify"])) {
+        $file = $_FILES["sales_receipt"];
+
+        if ($file['size'] == 0) {
+            tep_query("UPDATE sales SET
+            sales_qty = '" . $_POST["sales_qty"] . "',
+            sales_dateCreated = '" . $_POST["sales_dateCreated"] . "',
+            sales_status = '" . $_POST["sales_status"] . "'
+            WHERE sales_id = '" . $_POST["sales_id"] . "'
+            ");
+        } else {
+            $fileName = $file["name"];
+            $fileTmpName = $file["tmp_name"];
+            $fileSize = $file["size"];
+            $fileError = $file["error"];
+            $fileType = $file["type"];
+
+            $fileExt = explode(".", $fileName);
+            $fileActualExt = strtolower(end($fileExt));
+            $allowed = array("jpg", "jpeg", "png");
+
+            if (in_array($fileActualExt, $allowed)) {
+                if ($fileError === 0) {
+                    if ($fileSize < 1000000) {
+                        $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                        $fileDestination = "images/" . $fileNameNew;
+                        // START - Upload 
+                        move_uploaded_file($fileTmpName, $fileDestination);
+                        tep_query("UPDATE sales SET
+                        sales_qty = '" . $_POST["sales_qty"] . "',
+                        sales_receipt = '" . $fileNameNew . "',
+                        sales_dateCreated = '" . $_POST["sales_dateCreated"] . "',
+                        sales_status = '" . $_POST["sales_status"] . "'
+                        WHERE sales_id = '" . $_POST["sales_id"] . "'
+                        ");
+                        echo redirect("sales.php?modify=success");
+                    } else {
+                        echo alert("Your file is too big.");
+                    }
+                } else {
+                    echo alert("There was an error uploading your file.");
+                }
+            } else {
+                echo alert("You cannot upload files of this type.");
+            }
+        }
     }
     ?>
     <div class="container-xl">
@@ -304,7 +390,7 @@
                     </div>
                 </div>
                 <div class="col-sm-5">
-                    <a href="#add_order" class="btn btn-info" data-toggle="modal"> <span>Add Order</span></a>
+                    <a href="#add_sales" class="btn btn-info" data-toggle="modal"> <span>Add Sales</span></a>
                 </div>
                 <br>
                 <table class="table table-striped table-hover">
@@ -313,9 +399,10 @@
                             <th>No</th>
                             <th>Member Email</th>
                             <th>Item</th>
+                            <th>Quantity</th>
                             <th>Amount</th>
                             <th>Receipt</th>
-                            <th>Order Placed</th>
+                            <th>Sales Date</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -324,13 +411,14 @@
                         <?php
                         $cnt = 0;
 
-                        $qryRow = tep_query("SELECT * FROM orders ORDER BY order_id DESC");
+                        $qryRow = tep_query("SELECT * FROM sales ORDER BY sales_id DESC");
                         while ($infoRow = tep_fetch_object($qryRow)) {
                             $cnt++;
-                            $customer = tep_fetch_object(tep_query("SELECT * FROM customer WHERE customer_id = '" . $infoRow->customer_id . "'"));
-                            $item_idListArr = explode(';', $infoRow->item_idList);
-
-                            $status = $infoRow->order_status;
+                            $member = tep_fetch_object(tep_query("SELECT * FROM members WHERE members_id = '" . $infoRow->member_id . "'"));
+                            $inv = tep_fetch_object(tep_query("SELECT * FROM inventory WHERE inv_id = {$infoRow->inv_id}"));
+                            
+                            $amount = $infoRow->sales_qty * $inv->inv_price;
+                            $status = $infoRow->sales_status;
 
                             if ($status == 2) {
                                 echo '<tr data-status="completed">';
@@ -346,29 +434,19 @@
                             }
                             echo '
                             <td>' . $cnt . '</td>
-                            <td><a href="#customer_info" class="get_customer" data-toggle="modal"
-                            data-id="' . $customer->customer_id . '"
-                            data-name="' . $customer->customer_name . '"
-                            data-email="' . $customer->customer_email . '"
-                            data-contact="' . $customer->customer_contact . '"
-                            data-address="' . $customer->customer_address . '"
-                            data-status="' . $customer->customer_status . '"
-                            >' . $customer->customer_email . '</a></td>
-                            <td><ol>';
-                            $cnt2 = 0;
-                            foreach ($item_idListArr as $id) {
-                                if ($id == null) {
-                                    continue;
-                                }
-                                $cart_item = tep_fetch_object(tep_query("SELECT * FROM cart_items WHERE item_id = '" . $id . "'"));
-                                $product = tep_fetch_object(tep_query("SELECT * FROM products WHERE product_id = '" . $cart_item->product_id . "'"));
-
-                            }
-                            echo '
-                            </ol></td>
-                            <td>RM ' . $infoRow->order_totalPrice . '</td>
-                            <td><a href="#"><img src="../../images/' . $infoRow->order_receipt . '" style="width:40px;height:40px"></a></td>
-                            <td>' . $infoRow->order_dateCreated . '</td>
+                            <td><a href="#member_info" class="get_member" data-toggle="modal"
+                            data-id="' . $member->members_id . '"
+                            data-name="' . $member->members_name . '"
+                            data-email="' . $member->members_email . '"
+                            data-contact="' . $member->members_contact . '"
+                            data-address="' . $member->members_address . '"
+                            data-status="' . $member->members_status . '"
+                            >' . $member->members_email . '</a></td>
+                            <td>' . $inv->inv_title . '</td>
+                            <td>' . $infoRow->sales_qty . '</td>
+                            <td>RM ' . $amount . '</td>
+                            <td><a href="#"><img src="images/' . $infoRow->sales_receipt . '" style="width:40px;height:40px"></a></td>
+                            <td>' . $infoRow->sales_dateCreated . '</td>
                             <td>';
                             if ($status == 2) {
                                 echo '<span class="badge badge-primary">Completed</span>';
@@ -384,15 +462,14 @@
                             }
                             echo '
                             </td>
-                            <td><a href="#edit_order" class="btn btn-sm manage get_details" data-toggle="modal"
-                            data-id = "' . $infoRow->order_id . '"
-                            data-pref_date = "' . $infoRow->preffered_date . '"
-                            data-pref_time = "' . $infoRow->preffered_time . '"
-                            data-method = "' . $infoRow->order_pickupMethod . '"
-                            data-ship_date = "' . $infoRow->shipment_date . '"
-                            data-status = "' . $infoRow->order_status . '"
-                            data-emp_id = "' . $infoRow->emp_id . '"
-                            >D&M</a></td>
+                            <td><a href="#edit_sales" class="btn btn-sm manage get_details" data-toggle="modal"
+                            data-sales_id = "' . $infoRow->sales_id . '"
+                            data-inv_id = "' . $infoRow->inv_id . '"
+                            data-sales_qty = "' . $infoRow->sales_qty . '"
+                            data-sales_dateCreated = "' . $infoRow->sales_dateCreated . '"
+                            data-sales_status = "' . $infoRow->sales_status . '"
+                            data-member_id = "' . $infoRow->member_id . '"
+                            >Edit</a></td>
                             ';
                         }
                         ?>
@@ -402,119 +479,106 @@
         </div>
     </div>
     <!-- Add Modal HTML -->
-    <div id="add_order" class="modal fade">
+    <div id="add_sales" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form>
+                <form method="POST" enctype="multipart/form-data">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Details</h4>
+                        <h4 class="modal-title">Add Sales</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Sales ID</label>
-                            <input type="text" class="form-control" required>
+                            <label>Inventory ID</label>
+                            <input type="text" class="form-control" name="inv_id" required>
                         </div>
                         <div class="form-group">
-                            <label>Member ID</label>
-                            <input type="text" class="form-control" required>
+                            <label>Quantity</label>
+                            <input type="text" class="form-control" name="sales_qty" required>
                         </div>
                         <div class="form-group">
-                            <label>Order Placed</label>
-                            <input type="date" class="form-control" required>
+                            <label>Receipt</label>
+                            <input type="file" class="form-control" name="sales_receipt" required>
                         </div>
                         <div class="form-group">
-                            <label>Item</label>
-                            <textarea class="form-control" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>QTY</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Delivery Status</label>
+                            <label>Sales Status</label>
                             <br>
-                            <select name="delivey" id="delivey" style="width:335px;height:40px">
-                                <option value="deliverd">Completed</option>
-                                <option value="deliverd">Delivered</option>
-                                <option value="pending">Pending</option>
-                                <option value="canceled">Cancelled</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-info" value="Add">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Order HTML -->
-    <div id="edit_order" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Manage Details</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <input type="hidden" class="get_id" name="order_id">
-                            <label>Preffered Date</label>
-                            <div class="cursor-not-allowed">
-                                <input type="text" class="form-control avoid-clicks get_pref_date">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Preffered Time</label>
-                            <div class="cursor-not-allowed">
-                                <input type="text" class="form-control avoid-clicks get_pref_time">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Method</label>
-                            <br>
-                            <div class="cursor-not-allowed">
-                                <select class="get_method avoid-clicks" style="width:335px;height:40px">
-                                    <option value="1">Delivery</option>
-                                    <option value="0">Pick Up</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Shipment Date</label>
-                            <div class="cursor-not-allowed">
-                                <input type="text" class="form-control get_ship_date avoid-clicks">
-                            </div>
-                            <input type="date" class="form-control" name="shipment_date">
-                        </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <br>
-                            <select class="get_status" style="width:335px;height:40px" name="order_status">
+                            <select name="sales_status" style="width:335px;height:40px">
                                 <option value="2">Completed</option>
                                 <option value="1">Delivered</option>
                                 <option value="0">Pending</option>
-                                <option value="-1">Cancelled</option>
+                                <option value="-1">Canceled</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>ID of the staff responsible for the delivery: </label>
-                            <input type="number" class="form-control get_emp_id" name="emp_id">
+                            <label>Sales Date</label>
+                            <input type="date" class="form-control" name="sales_dateCreated" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Member ID</label>
+                            <input type="text" class="form-control" name="member_id" required>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-info" name="go_update" value="Update">
+                        <input type="submit" class="btn btn-info" name="add_new" value="Add">
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- Customer Info Modal -->
-    <div id="customer_info" class="modal fade">
+    <!-- Edit Sales HTML -->
+    <div id="edit_sales" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Sales</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="sales_id" class="get_sales_id">
+                        <div class="form-group">
+                            <label>Inventory ID</label>
+                            <input type="text" class="form-control get_inv_id" name="inv_id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="text" class="form-control get_sales_qty" name="sales_qty" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Receipt</label>
+                            <input type="file" class="form-control" name="sales_receipt">
+                        </div>
+                        <div class="form-group">
+                            <label>Sales Status</label>
+                            <br>
+                            <select class="get_sales_status" name="sales_status" style="width:335px;height:40px">
+                                <option value="2">Completed</option>
+                                <option value="1">Delivered</option>
+                                <option value="0">Pending</option>
+                                <option value="-1">Canceled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Sales Date</label>
+                            <input type="date" class="form-control get_sales_dateCreated" name="sales_dateCreated" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Member ID</label>
+                            <input type="text" class="form-control get_member_id" name="member_id" readonly>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-info" name="go_modify" value="Edit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Member Info Modal -->
+    <div id="member_info" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -563,28 +627,24 @@
         // update Modal
         $(document).ready(function() {
             $(document).on('click', '.get_details', function(e) {
+                var get_sales_id = $(this).attr("data-sales_id");
+                var get_inv_id = $(this).attr("data-inv_id");
+                var get_sales_qty = $(this).attr("data-sales_qty");
+                var get_sales_status = $(this).attr("data-sales_status");
+                var get_sales_dateCreated = $(this).attr("data-sales_dateCreated");
+                var get_member_id = $(this).attr("data-member_id");
 
-                var get_id = $(this).attr("data-id");
-                var get_pref_date = $(this).attr("data-pref_date");
-                var get_pref_time = $(this).attr("data-pref_time");
-                var get_method = $(this).attr("data-method");
-                var get_ship_date = $(this).attr("data-ship_date");
-                var get_status = $(this).attr("data-status");
-                var get_emp_id = $(this).attr("data-emp_id");
-
-                $(".get_id").val(get_id);
-                $(".get_pref_date").val(get_pref_date);
-                $(".get_pref_time").val(get_pref_time);
-                $(".get_method").val(get_method);
-                $(".get_ship_date").val(get_ship_date);
-                $(".get_status").val(get_status);
-                $(".get_emp_id").val(get_emp_id);
-
+                $(".get_sales_id").val(get_sales_id);
+                $(".get_inv_id").val(get_inv_id);
+                $(".get_sales_qty").val(get_sales_qty);
+                $(".get_sales_status").val(get_sales_status);
+                $(".get_sales_dateCreated").val(get_sales_dateCreated);
+                $(".get_member_id").val(get_member_id);
             });
         });
-        // Customer Info Modal
+        // Member Info Modal
         $(document).ready(function() {
-            $(document).on('click', '.get_customer', function(e) {
+            $(document).on('click', '.get_member', function(e) {
 
                 var get_id = $(this).attr("data-id");
                 var get_name = $(this).attr("data-name");

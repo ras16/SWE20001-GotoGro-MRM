@@ -117,7 +117,7 @@ function tep_get_server_info($link = 'db_link')
 // ================================
 function redirect($url, $parameters = '')
 {
-    header("Location: $url$parameters");
+    return "<script>window.location='" . $url . "" . $parameters . "'</script>";
 }
 function alert($string)
 {

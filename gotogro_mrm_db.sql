@@ -90,13 +90,9 @@ CREATE TABLE `sales` (
   `sales_id` int(11) NOT NULL,
   `inv_id` int(11) NOT NULL,
   `sales_qty` decimal(10,2) DEFAULT NULL,
-  `sales_pickupMethod` int(1) DEFAULT NULL COMMENT '0=pickup 1=delivery',
   `sales_receipt` text DEFAULT NULL,
-  `preffered_date` varchar(11) DEFAULT NULL,
-  `preffered_time` varchar(11) DEFAULT NULL,
-  `shipment_date` text NOT NULL,
   `sales_status` int(1) NOT NULL DEFAULT 0,
-  `sales_dateCreated` datetime DEFAULT NULL,
+  `sales_dateCreated` DATE DEFAULT NULL,
   `member_id` int(11) DEFAULT NULL,
   `emp_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -112,10 +108,22 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`emp_id`);
 
 --
--- Indexes for table `customer`
+-- Indexes for table `members`
 --
 ALTER TABLE `members`
   ADD PRIMARY KEY (`members_id`);
+
+--
+-- Indexes for table `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`inv_id`);
+
+--
+-- Indexes for table `sales`
+--
+ALTER TABLE `sales`
+  ADD PRIMARY KEY (`sales_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -125,16 +133,22 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `customer`
+-- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `members_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `members_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `customer`
+-- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT;
+  
+--
+-- AUTO_INCREMENT for table `sales`
+--
+ALTER TABLE `sales`
+  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT;
