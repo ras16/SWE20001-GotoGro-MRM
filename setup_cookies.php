@@ -1,4 +1,4 @@
-<?php include 'library/library.php';
+<?php include 'setup.php';
 
 if (isset($_GET["emp_email"])) {
     $infoRow = tep_fetch_object(tep_query("SELECT * FROM employees WHERE emp_email = '" . $_GET["emp_email"] . "'"));

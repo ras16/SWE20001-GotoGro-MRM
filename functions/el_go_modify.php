@@ -1,4 +1,4 @@
-<?php include 'setup.php';
+<?php include '../setup.php';
 
 header('Content-Type: application/json');
 

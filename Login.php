@@ -1,3 +1,5 @@
+<?php include 'setup.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -83,7 +85,6 @@
 </head>
 
 <body>
-	<?php include 'library/library.php'; ?>
 	<?php
 	if (isset($_COOKIE["token"])) {
 		echo script("console.log('token [SET]')");

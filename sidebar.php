@@ -1,4 +1,4 @@
-<?php include 'library/library.php'; ?>
+<?php include_once 'library/library.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

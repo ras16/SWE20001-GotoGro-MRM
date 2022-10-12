@@ -1,4 +1,4 @@
-<?php include 'setup.php'; ?>
+<?php include '../setup.php'; ?>
 
 <table class="table table-striped table-hover">
     <thead>
