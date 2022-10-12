@@ -62,10 +62,10 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `employees` (`emp_id`, `emp_name`, `emp_email`, `emp_password`, `emp_contact`, `emp_position`, `emp_status`, `emp_dateCreated`) VALUES
-(1, 'Manager', 'acl_9@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 9, 1, '2021-07-17 13:32:10'),
-(2, 'Site-management Staff', 'acl_2@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 2, 1, '2021-07-17 13:33:10'),
-(3, 'In-store Staff', 'acl_1@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 1, 1, '2021-07-17 13:35:04'),
-(4, 'Delivery Staff', 'acl_0@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 0, 1, '2021-07-17 13:35:30');
+(1, 'Manager', 'manager@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 9, 1, '2021-07-17 13:32:10'),
+(2, 'Site-management Staff', 'sitemanagement@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 2, 1, '2021-07-17 13:33:10'),
+(3, 'In-store Staff', 'instorestaff@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 1, 1, '2021-07-17 13:35:04'),
+(4, 'Delivery Staff', 'deliverystaff@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', '01112223333', 0, 1, '2021-07-17 13:35:30');
 
 --
 -- Indexes for dumped tables
