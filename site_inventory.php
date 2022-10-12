@@ -393,7 +393,7 @@
                     </div>
                 </div>
                 <div class="col-sm-5">
-                    <a href="#add_inv" class="btn btn-info" data-toggle="modal"> <span>Add inventory</span></a>
+                    <a href="#add_inv" class="btn btn-info" data-toggle="modal"> <span>Add Inventory</span></a>
                 </div>
                 <br>
                 <table class="table table-striped table-hover">
