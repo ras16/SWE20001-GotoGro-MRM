@@ -403,7 +403,7 @@
                             <th>Image</th>
                             <th>Title</th>
                             <th>Price</th>
-                            <th>inventory Detail</th>
+                            <th>Inventory Details</th>
                             <th>Best Seller</th>
                             <th>Status</th>
                             <th>Action</th>
