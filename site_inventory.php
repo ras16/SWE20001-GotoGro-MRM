@@ -482,7 +482,7 @@
             <div class="modal-content">
                 <form method="POST" enctype="multipart/form-data">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add inventory</h4>
+                        <h4 class="modal-title">Add Inventory</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
