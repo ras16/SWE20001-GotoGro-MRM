@@ -204,10 +204,14 @@
       transform: translateY(-50%);
     }
 
+    html, body {
+      height: 100%;
+    }
+
     .home-section {
       position: relative;
       background: #E4E9F7;
-      height: 100vh;
+      min-height: 100%;
       left: 260px;
       width: calc(100% - 260px);
       transition: all 0.5s ease;

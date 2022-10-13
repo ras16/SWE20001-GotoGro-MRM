@@ -480,6 +480,39 @@
             </div>
         </div>
     </div>
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Monthly Sales Report</h2>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="search-box">
+                                <i class="material-icons">&#xE8B6;</i>
+                                <input type="text" id="search_input" placeholder="Search&hellip;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <?php
+                                // get inventory
+                            ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            // get months
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <!-- Add Modal HTML -->
     <div id="add_sales" class="modal fade">
         <div class="modal-dialog">
