@@ -208,12 +208,23 @@
                 let totalSales = 0;
                 $("#myTable tr").each(function() {
                     if ($(this).is(":visible")) {
-                        totalSales += parseInt($(this).find("td[data-amount]").attr("data-amount"));
+                        totalSales += parseInt($(this).attr("data-amount"));
                     }
                 });
                 totalSalesSpan.text(totalSales);
             }
             updateTotalSales();
+
+            $("#filter-month").change(function() {
+                let month = this.value === "" ? null : new Date(this.value);
+
+                $("#myTable tr").each(function() {
+                    let date = new Date($(this).attr("data-sales_dateCreated"));
+                    $(this).toggle(month === null || date.getMonth() == month.getMonth());
+                })
+
+                updateTotalSales();
+            })
 
             $(".btn-group .btn").click(function() {
                 var inputValue = $(this).find("input").val();
@@ -428,6 +439,9 @@
                         </div>
                         <br><br>
                         <div class="col-sm-4">
+                            <div class="float-right">
+                                <label>Month:&nbsp;</label><input type="month" id="filter-month">
+                            </div>
                             <div class="search-box">
                                 <i class="material-icons">&#xE8B6;</i>
                                 <input type="text" id="search_input" placeholder="Search&hellip;">
@@ -463,18 +477,24 @@
                             $amount = $infoRow->sales_qty * $inv->inv_price;
                             $status = $infoRow->sales_status;
 
-                            if ($status == 2) {
-                                echo '<tr data-status="completed">';
+                            echo '<tr data-status="';
+                            switch ($status) {
+                                case 2:
+                                    echo 'completed';
+                                    break;
+                                case 1:
+                                    echo 'done';
+                                    break;
+                                case 0:
+                                    echo 'pending';
+                                    break;
+                                case -1:
+                                    echo 'cancel';
+                                    break;
+                                default:
+                                    break;
                             }
-                            if ($status == 1) {
-                                echo '<tr data-status="done">';
-                            }
-                            if ($status == 0) {
-                                echo '<tr data-status="pending">';
-                            }
-                            if ($status == -1) {
-                                echo '<tr data-status="cancel">';
-                            }
+                            echo "\" data-amount=\"$amount\" data-sales_dateCreated=\"{$infoRow->sales_dateCreated}\">";
                             echo '
                             <td>' . $infoRow->sales_id . '</td>
                             <td><a href="#member_info" class="get_member" data-toggle="modal"
