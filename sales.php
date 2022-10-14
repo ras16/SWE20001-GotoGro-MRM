@@ -34,6 +34,12 @@
             overflow: hidden;
         }
 
+        .table-content {
+            margin: 0px -30px 0px;
+            padding: 20px 30px 5px;
+            overflow: auto;
+        }
+
         .table-title .btn-group {
             float: right;
         }
@@ -186,18 +192,39 @@
         .cursor-not-allowed {
             cursor: not-allowed;
         }
+
+        .container-xl {
+            padding-bottom: 10px;
+        }
+
+        .month-pickers {
+            text-align: right;
+        }
     </style>
     <script>
         $(document).ready(function() {
+            let totalSalesSpan = $("#total_sales");
+            function updateTotalSales() {
+                let totalSales = 0;
+                $("#myTable tr").each(function() {
+                    if ($(this).is(":visible")) {
+                        totalSales += parseInt($(this).find("td[data-amount]").attr("data-amount"));
+                    }
+                });
+                totalSalesSpan.text(totalSales);
+            }
+            updateTotalSales();
+
             $(".btn-group .btn").click(function() {
                 var inputValue = $(this).find("input").val();
                 if (inputValue != 'all') {
-                    var target = $('table tr[data-status="' + inputValue + '"]');
-                    $("table tbody tr").not(target).hide();
+                    var target = $('#myTable tr[data-status="' + inputValue + '"]');
+                    $("#myTable tr").not(target).hide();
                     target.fadeIn();
                 } else {
-                    $("table tbody tr").fadeIn();
+                    $("#myTable tr").fadeIn();
                 }
+                updateTotalSales();
             });
             // Changing the class of status label to support Bootstrap 4
             var bs = $.fn.tooltip.Constructor.VERSION;
@@ -209,15 +236,12 @@
                     $(this).removeAttr("class").addClass(newClassStr);
                 });
             }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+            
             // Activate tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
             // Select/Deselect checkboxes
-            var checkbox = $('table tbody input[type="checkbox"]');
+            var checkbox = $('#myTable input[type="checkbox"]');
             $("#selectAll").click(function() {
                 if (this.checked) {
                     checkbox.each(function() {
@@ -234,17 +258,34 @@
                     $("#selectAll").prop("checked", false);
                 }
             });
-        });
-    </script>
-
-    <script>
-        //Search bar
-        $(document).ready(function() {
+            
             $("#search_input").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                $("#myTable tr").each(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
+                updateTotalSales();
+            });
+
+            let monthlySales = $("#monthly-sales-report tr");
+
+            let afterDate = null;
+            let beforeDate = null;
+            function updateMonthlySales() {
+                monthlySales.each(function() {
+                    let date = new Date($(this).attr("data-sales_month"));
+                    $(this).toggle((afterDate === null || date >= afterDate) && (beforeDate === null || date <= beforeDate));
+                });
+            }
+
+            $("#after-month").change(function() {
+                afterDate = this.value === "" ? null : new Date(this.value);
+                updateMonthlySales();
+            });
+
+            $("#before-month").change(function() {
+                beforeDate = this.value === "" ? null : new Date(this.value);
+                updateMonthlySales();
             });
         });
     </script>
@@ -446,7 +487,7 @@
                             >' . $member->members_email . '</a></td>
                             <td>' . $inv->inv_title . '</td>
                             <td>' . $infoRow->sales_qty . '</td>
-                            <td>RM ' . $amount . '</td>
+                            <td data-amount=' . $amount . '>RM ' . $amount . '</td>
                             <td><a href="#"><img src="images/' . $infoRow->sales_receipt . '" style="width:40px;height:40px"></a></td>
                             <td>' . $infoRow->sales_dateCreated . '</td>
                             <td>';
@@ -477,6 +518,9 @@
                         ?>
                     </tbody>
                 </table>
+                <div class="col-sm-5">
+                    Total Sales: <b>RM <span id="total_sales">0</span></b>
+                </div>
             </div>
         </div>
     </div>
@@ -486,30 +530,72 @@
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h2>Monthly Sales Report</h2>
+                            <h2>Monthly Sales <b>Report</b></h2>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="search-box">
-                                <i class="material-icons">&#xE8B6;</i>
-                                <input type="text" id="search_input" placeholder="Search&hellip;">
-                            </div>
+                        <div class="col-sm-4 month-pickers">
+                            <label>After Month:&nbsp;</label><input type="month" id="after-month">
+                            <br>
+                            <label>Before Month:&nbsp;</label><input type="month" id="before-month">
                         </div>
                     </div>
                 </div>
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
+                <div class="table-content">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Month/Year</th>
+                                <?php
+                                    $inventory_query = tep_query('SELECT `inv_title` FROM `inventory` ORDER BY `inv_id`');
+                                    while ($inventory_row = tep_fetch_object($inventory_query)) {
+                                        echo "<th>{$inventory_row->inv_title}</th>";
+                                    }
+                                ?>
+                                <th>Total Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthly-sales-report">
                             <?php
-                                // get inventory
+                                $query = tep_query(
+                                    'SELECT
+                                        CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
+                                        `inv_id`,
+                                        ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `sales`
+                                    FROM `sales` NATURAL JOIN `inventory`
+                                    WHERE `sales_status` = 2
+                                    GROUP BY `month_year`, `inv_id`;');
+                                while ($result = tep_fetch_object($query)) {
+                                    $report[$result->month_year][$result->inv_id] = $result->sales;
+                                }
+
+                                $inv_query = tep_query('SELECT `inv_id` FROM `inventory` ORDER BY `inv_id`');
+                                while ($inv_row = tep_fetch_object($inv_query)) {
+                                    $columns[] = $inv_row->inv_id;
+                                }
+
+                                $month_year_query = tep_query(
+                                    'SELECT
+                                        CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
+                                        TIMESTAMPADD(MONTH, TIMESTAMPDIFF(MONTH, "1970-01-01", `sales_dateCreated`), "1970-01-01") AS `sales_month`,
+                                        ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `total_sales`
+                                    FROM `sales` NATURAL JOIN `inventory`
+                                    WHERE `sales_status` = 2
+                                    GROUP BY `month_year`
+                                    ORDER BY `sales_dateCreated`');
+                                while ($month_year_row = tep_fetch_object($month_year_query)) {
+                                    echo "<tr data-sales_month=\"{$month_year_row->sales_month}\">";
+                                    $row = $month_year_row->month_year;
+                                    echo "<td>$row</td>";
+                                    foreach ($columns as $column) {
+                                        $sales = isset($report[$row][$column]) ? $report[$row][$column] : '0.00';
+                                        echo "<td>RM $sales</td>";
+                                    }
+                                    echo "<td>RM {$month_year_row->total_sales}</td>";
+                                    echo '</tr>';
+                                }
                             ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            // get months
-                        ?>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
