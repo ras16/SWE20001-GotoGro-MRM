@@ -200,6 +200,10 @@
         .month-pickers {
             text-align: right;
         }
+
+        .table-dropdown {
+            cursor: pointer;
+        }
     </style>
     <script>
         $(document).ready(function() {
@@ -447,6 +451,7 @@
                                 <input type="text" id="search_input" placeholder="Search&hellip;">
                             </div>
                         </div>
+                        <div class="table-dropdown bx bxs-chevron-down arrow"></div>
                     </div>
                 </div>
                 <div class="col-sm-5">
@@ -557,6 +562,7 @@
                             <br>
                             <label>Before Month:&nbsp;</label><input type="month" id="before-month">
                         </div>
+                        <div class="table-dropdown bx bxs-chevron-down arrow"></div>
                     </div>
                 </div>
                 <div class="table-content">
@@ -782,9 +788,8 @@
                 $(".get_sales_dateCreated").val(get_sales_dateCreated);
                 $(".get_member_id").val(get_member_id);
             });
-        });
-        // Member Info Modal
-        $(document).ready(function() {
+            
+            // Member Info Modal
             $(document).on('click', '.get_member', function(e) {
 
                 var get_id = $(this).attr("data-id");
@@ -801,6 +806,10 @@
                 $(".get_address").val(get_address);
                 $(".get_status").val(get_status);
 
+            });
+
+            $(".table-dropdown").click(function() {
+                alert($(this).parent().parent().parent().height());
             });
         });
     </script>
