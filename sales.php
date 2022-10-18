@@ -203,6 +203,15 @@
 
         .table-dropdown {
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .table-dropdown.rotate {
+            transform: rotate(-180deg);
+        }
+        
+        .table-dropdown:not(.rotate) {
+            transform: rotate(0deg);
         }
     </style>
     <script>
@@ -733,8 +742,24 @@
 
             });
 
+            
             $(".table-dropdown").click(function() {
-                alert($(this).parent().parent().parent().height());
+                $(this).toggleClass("rotate");
+
+                let tableTitle = $(this).parent().parent();
+                let tableWrapper = tableTitle.parent();
+                if (tableWrapper.attr("data-dropdown-hidden") === undefined) {
+                    tableWrapper.attr("data-dropdown-hidden", "");
+                    tableWrapper.animate({
+                        height: tableTitle.outerHeight()
+                    }, 500);
+                } else {
+                    tableWrapper.removeAttr("data-dropdown-hidden");
+                    let height = tableWrapper.css("height", "auto").height();
+                    tableWrapper.height(tableTitle.outerHeight()).animate({
+                        height: height
+                    }, 500);
+                }
             });
         });
     </script>
