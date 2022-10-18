@@ -280,11 +280,16 @@
       <?php if ($getuser->emp_position >= 0 && $getuser->emp_position != 2) { ?>
         <li>
           <div class="iocn-link">
-            <a href="sales.php">
+            <a href="#">
               <i class='fa fa-list'></i>
               <span class="link_name">Sales</span>
             </a>
+            <i class='bx bxs-chevron-down arrow'></i>
           </div>
+          <ul class="sub-menu">
+            <li><a href="sales.php">Sales</a></li>
+            <li><a href="SalesReport.php">Monthly Report</a></li>
+          </ul>
         </li>
       <?php } ?>
 
