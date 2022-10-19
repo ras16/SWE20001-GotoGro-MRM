@@ -200,19 +200,6 @@
         .month-pickers {
             text-align: right;
         }
-
-        .table-dropdown {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .table-dropdown.rotate {
-            transform: rotate(-180deg);
-        }
-        
-        .table-dropdown:not(.rotate) {
-            transform: rotate(0deg);
-        }
     </style>
     <script>
         $(document).ready(function() {
@@ -460,7 +447,6 @@
                                 <input type="text" id="search_input" placeholder="Search&hellip;">
                             </div>
                         </div>
-                        <div class="table-dropdown bx bxs-chevron-down arrow"></div>
                     </div>
                 </div>
                 <div class="col-sm-5">
@@ -740,26 +726,6 @@
                 $(".get_address").val(get_address);
                 $(".get_status").val(get_status);
 
-            });
-
-            
-            $(".table-dropdown").click(function() {
-                $(this).toggleClass("rotate");
-
-                let tableTitle = $(this).parent().parent();
-                let tableWrapper = tableTitle.parent();
-                if (tableWrapper.attr("data-dropdown-hidden") === undefined) {
-                    tableWrapper.attr("data-dropdown-hidden", "");
-                    tableWrapper.animate({
-                        height: tableTitle.outerHeight()
-                    }, 500);
-                } else {
-                    tableWrapper.removeAttr("data-dropdown-hidden");
-                    let height = tableWrapper.css("height", "auto").height();
-                    tableWrapper.height(tableTitle.outerHeight()).animate({
-                        height: height
-                    }, 500);
-                }
             });
         });
     </script>

@@ -200,10 +200,6 @@
         .month-pickers {
             text-align: right;
         }
-
-        .table-dropdown {
-            cursor: pointer;
-        }
     </style>
     <script>
         $(document).ready(function() {
@@ -426,7 +422,6 @@
                             <br>
                             <label>Before Month:&nbsp;</label><input type="month" id="before-month">
                         </div>
-                        <div class="table-dropdown bx bxs-chevron-down arrow"></div>
                     </div>
                 </div>
                 <div class="table-content">
