@@ -289,6 +289,7 @@
           <ul class="sub-menu">
             <li><a href="sales.php">Sales</a></li>
             <li><a href="SalesReport.php">Monthly Report</a></li>
+            <li><a href="sales_analysis.php">Sales Analysis</a></li>
           </ul>
         </li>
       <?php } ?>
