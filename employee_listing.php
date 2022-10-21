@@ -316,7 +316,7 @@
 		if ($getuser->emp_position == 2) {
 			echo redirect("site_product.php");
 		} else {
-			echo redirect("order.php");
+			echo redirect("sales.php");
 		}
 	}
 	?>
