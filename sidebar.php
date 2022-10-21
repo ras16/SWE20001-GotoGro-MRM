@@ -288,10 +288,10 @@
           </div>
           <ul class="sub-menu">
             <li><a href="sales.php">Sales</a></li>
-            <?php } ?>
             <?php if ($getuser->emp_position == 9) { ?>
             <li><a href="SalesReport.php">Monthly Report</a></li>
             <li><a href="sales_analysis.php">Sales Analysis</a></li>
+            <?php } ?>
           </ul>
         </li>
       <?php } ?>
