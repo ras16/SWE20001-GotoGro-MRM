@@ -227,6 +227,109 @@
                 hideHover: true,
                 preUnits: "RM"
             });
+
+			new Morris.Area({
+                element: 'area-chart',
+                data: <?php
+                    $data = [];
+                    $query = tep_query(
+                        'SELECT
+                            CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
+                            `inv_title`,
+                            ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `sales`
+                        FROM `sales` NATURAL JOIN `inventory`
+                        WHERE `sales_status` = 2
+                        GROUP BY `month_year`, `inv_id`');
+                    while ($result = tep_fetch_object($query)) {
+                        $data[$result->month_year][$result->inv_title] = $result->sales;
+                    }
+
+                    $inv_query = tep_query('SELECT inv_title FROM inventory');
+                    while ($infoRow = tep_fetch_object($inv_query)) {
+                        $inv_data[] = $infoRow->inv_title;
+                    }
+
+                    $month_year_query = tep_query(
+                        'SELECT
+                            CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
+                            TIMESTAMPADD(MONTH, TIMESTAMPDIFF(MONTH, "1970-01-01", `sales_dateCreated`), "1970-01-01") AS `sales_month`,
+                            ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `total_sales`
+                        FROM `sales` NATURAL JOIN `inventory`
+                        WHERE `sales_status` = 2
+                        GROUP BY `month_year`
+                        ORDER BY `sales_dateCreated`');
+                    while ($month_year_row = tep_fetch_object($month_year_query)) {
+                        $tmp = $data[$month_year_row->month_year];
+                        foreach ($inv_data as $inv) {
+                            if (!isset($tmp[$inv])) {
+                                $tmp[$inv] = 0;
+                            }
+                        }
+                        $tmp['month'] = $month_year_row->sales_month;
+                        $month_year_data[] = $tmp;
+                    }
+
+                    echo json_encode($month_year_data);
+                ?>,
+                xkey: "month",
+                ykeys: <?php
+                    echo json_encode($inv_data);
+                ?>,
+                labels: <?php
+                    echo json_encode($inv_data);
+                ?>,
+                xLabels: "month",
+                hideHover: true,
+                preUnits: "RM",
+                behaveLikeLine: true
+            });
+
+            /*new Morris.Donut({
+                element: 'donut-chart',
+                data: <?php
+                    $data = [];
+                    $query = tep_query(
+                        'SELECT sales_status, COUNT(sales_id) AS count
+                        FROM sales
+                        GROUP BY sales_status
+                        ORDER BY sales_status DESC');
+                    while ($infoRow = tep_fetch_object($query)) {
+                        switch ($infoRow->sales_status) {
+                            case 2:
+                                $label = 'Completed';
+                                break;
+                            case 1:
+                                $label = 'Delivered';
+                                break;
+                            case 0:
+                                $label = 'Pending';
+                                break;
+                            case -1:
+                                $label = 'Canceled';
+                                break;
+                            default:
+                                break;
+                        }
+                        $data[] = ['label' => $label, 'value' => $infoRow->count];
+                    }
+                    echo json_encode($data);
+                ?>,
+                colors: ["#007bff", "#28a745", "#ffc107", "#dc3545"]
+            });*/
+            new Morris.Donut({
+                element: 'donut-chart',
+                data: <?php
+                    $data = [];
+                    $query = tep_query(
+                        'SELECT inv_title, COUNT(sales_id) AS count
+                        FROM sales NATURAL JOIN inventory
+                        GROUP BY inv_id');
+                    while ($infoRow = tep_fetch_object($query)) {
+                        $data[] = ['label' => $infoRow->inv_title, 'value' => $infoRow->count];
+                    }
+                    echo json_encode($data);
+                ?>
+            });
         });
     </script>
 </head>
@@ -256,6 +359,34 @@
                     </div>
                 </div>
                 <div id="bar-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2><b>Monthly Sales</b> by <b>Product</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div id="area-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Members' Grocery <b>Needs</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div id="donut-chart"></div>
             </div>
         </div>
     </div>
