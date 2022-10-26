@@ -1,4 +1,7 @@
-<?php include 'setup.php'; ?>
+<?php include 'setup.php'; 
+include("export.php");
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -477,13 +480,23 @@
                                     echo "<td>RM {$month_year_row->total_sales}</td>";
                                     echo '</tr>';
                                 }
+
+                                
                             ?>
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
     </div>
-
+<div class="well-sm col-sm-12">
+		<div class="btn-group pull-right">	
+			<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">					
+				<button type="submit" id="export_csv_data" name='export_csv_data' value="Export to CSV" class="btn btn-info">Generate CSV file</button>
+			</form>
+		</div>
+	</div>
+    
 </body>
 </html>
