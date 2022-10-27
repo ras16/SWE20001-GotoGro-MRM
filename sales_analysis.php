@@ -321,11 +321,11 @@
                 data: <?php
                     $data = [];
                     $query = tep_query(
-                        'SELECT inv_title, COUNT(sales_id) AS count
+                        'SELECT inv_title, SUM(sales_qty) AS quantity
                         FROM sales NATURAL JOIN inventory
                         GROUP BY inv_id');
                     while ($infoRow = tep_fetch_object($query)) {
-                        $data[] = ['label' => $infoRow->inv_title, 'value' => $infoRow->count];
+                        $data[] = ['label' => $infoRow->inv_title, 'value' => $infoRow->quantity];
                     }
                     echo json_encode($data);
                 ?>
