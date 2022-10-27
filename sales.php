@@ -316,13 +316,13 @@
     }
 
     if (isset($_POST["add_new"])) {
-        $stmt = mysqli_prepare($db_link, 'SELECT * FROM inventory WHERE inv_id = ?');
+        $stmt = mysqli_prepare($db_link, 'SELECT * FROM inventory WHERE inv_id = ? AND inv_status = 1');
         mysqli_stmt_bind_param($stmt, 'i', $_POST['inv_id']);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
         
         if (mysqli_stmt_num_rows($stmt) == 1) {
-            $stmt = mysqli_prepare($db_link, 'SELECT * FROM members WHERE members_id = ?');
+            $stmt = mysqli_prepare($db_link, 'SELECT * FROM members WHERE members_id = ? AND members_status = 1');
             mysqli_stmt_bind_param($stmt, 'i', $_POST['member_id']);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
