@@ -316,51 +316,69 @@
     }
 
     if (isset($_POST["add_new"])) {
-        $file = $_FILES["sales_receipt"];
+        $stmt = mysqli_prepare($db_link, 'SELECT * FROM inventory WHERE inv_id = ?');
+        mysqli_stmt_bind_param($stmt, 'i', $_POST['inv_id']);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        
+        if (mysqli_stmt_num_rows($stmt) == 1) {
+            $stmt = mysqli_prepare($db_link, 'SELECT * FROM members WHERE members_id = ?');
+            mysqli_stmt_bind_param($stmt, 'i', $_POST['member_id']);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_store_result($stmt);
 
-        $fileName = $file["name"];
-        $fileTmpName = $file["tmp_name"];
-        $fileSize = $file["size"];
-        $fileError = $file["error"];
-        $fileType = $file["type"];
+            if (mysqli_stmt_num_rows($stmt) == 1) {
+                $file = $_FILES["sales_receipt"];
 
-        $fileExt = explode(".", $fileName);
-        $fileActualExt = strtolower(end($fileExt));
-        $allowed = array("jpg", "jpeg", "png");
+                $fileName = $file["name"];
+                $fileTmpName = $file["tmp_name"];
+                $fileSize = $file["size"];
+                $fileError = $file["error"];
+                $fileType = $file["type"];
 
-        if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0) {
-                if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = "images/" . $fileNameNew;
-                    // START - Upload 
-                    move_uploaded_file($fileTmpName, $fileDestination);
-                    tep_query("INSERT INTO sales(
-                        inv_id,
-                        sales_qty,
-                        sales_receipt,
-                        sales_status,
-                        sales_dateCreated,
-                        member_id,
-                        emp_id
-                    )VALUES(
-                        '" . $_POST["inv_id"] . "',
-                        '" . $_POST["sales_qty"] . "',
-                        '" . $fileNameNew . "',
-                        '" . $_POST["sales_status"] . "',
-                        '" . $_POST["sales_dateCreated"] . "',
-                        '" . $_POST["member_id"] . "',
-                        '" . $getuser->emp_id . "'
-                    );");
-                    echo redirect("sales.php?add_new=success");
+                $fileExt = explode(".", $fileName);
+                $fileActualExt = strtolower(end($fileExt));
+                $allowed = array("jpg", "jpeg", "png");
+
+                if (in_array($fileActualExt, $allowed)) {
+                    if ($fileError === 0) {
+                        if ($fileSize < 1000000) {
+                            $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                            $fileDestination = "images/" . $fileNameNew;
+                            // START - Upload 
+                            move_uploaded_file($fileTmpName, $fileDestination);
+                            tep_query("INSERT INTO sales(
+                                inv_id,
+                                sales_qty,
+                                sales_receipt,
+                                sales_status,
+                                sales_dateCreated,
+                                member_id,
+                                emp_id
+                            )VALUES(
+                                '" . $_POST["inv_id"] . "',
+                                '" . $_POST["sales_qty"] . "',
+                                '" . $fileNameNew . "',
+                                '" . $_POST["sales_status"] . "',
+                                '" . $_POST["sales_dateCreated"] . "',
+                                '" . $_POST["member_id"] . "',
+                                '" . $getuser->emp_id . "'
+                            );");
+                            echo redirect("sales.php?add_new=success");
+                        } else {
+                            echo alert("Your file is too big.");
+                        }
+                    } else {
+                        echo alert("There was an error uploading your file.");
+                    }
                 } else {
-                    echo alert("Your file is too big.");
+                    echo alert("You cannot upload files of this type.");
                 }
             } else {
-                echo alert("There was an error uploading your file.");
+                echo alert('Invalid member ID');
             }
         } else {
-            echo alert("You cannot upload files of this type.");
+            echo alert('Invalid inventory ID.');
         }
     } else if (isset($_POST["go_modify"])) {
         $file = $_FILES["sales_receipt"];
@@ -557,7 +575,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Inventory ID</label>
-                            <input type="text" class="form-control" name="inv_id" required>
+                            <input type="number" class="form-control" name="inv_id" required>
                         </div>
                         <div class="form-group">
                             <label>Quantity</label>
@@ -583,7 +601,7 @@
                         </div>
                         <div class="form-group">
                             <label>Member ID</label>
-                            <input type="text" class="form-control" name="member_id" required>
+                            <input type="number" class="form-control" name="member_id" required>
                         </div>
                     </div>
                     <div class="modal-footer">
