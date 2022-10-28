@@ -49,8 +49,8 @@ if (isset($_POST["export_csv_data"])) {
         $csv_row = [$month_year_row->month_year];
         foreach ($columns as $inv_row) {
             $csv_row[] = isset($report[$month_year_row->month_year][$inv_row->inv_id])
-                ? $report[$month_year_row->month_year][$inv_row->inv_id]
-                : '0.00';
+                ? 'RM' . $report[$month_year_row->month_year][$inv_row->inv_id]
+                : 'RM 0.00';
         }
         $csv_row[] = $month_year_row->total_sales;
         fputcsv($fh, $csv_row);
