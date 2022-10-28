@@ -1,6 +1,64 @@
 <?php 
-include 'setup.php'; 
-include 'export.php';
+include 'setup.php';
+
+$query = tep_query(
+    'SELECT
+        CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
+        `inv_id`,
+        ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `sales`
+    FROM `sales` NATURAL JOIN `inventory`
+    WHERE `sales_status` = 2
+    GROUP BY `month_year`, `inv_id`;');
+while ($result = tep_fetch_object($query)) {
+    $report[$result->month_year][$result->inv_id] = $result->sales;
+}
+
+$inv_query = tep_query('SELECT `inv_id`, `inv_title` FROM `inventory` ORDER BY `inv_id`');
+while ($inv_row = tep_fetch_object($inv_query)) {
+    $columns[] = $inv_row;
+}
+
+$month_year_query = tep_query(
+    'SELECT
+        CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
+        TIMESTAMPADD(MONTH, TIMESTAMPDIFF(MONTH, "1970-01-01", `sales_dateCreated`), "1970-01-01") AS `sales_month`,
+        ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `total_sales`
+    FROM `sales` NATURAL JOIN `inventory`
+    WHERE `sales_status` = 2
+    GROUP BY `month_year`
+    ORDER BY `sales_dateCreated`');
+while ($month_year_row = tep_fetch_object($month_year_query)) {
+    $rows[] = $month_year_row;
+}
+
+if (isset($_POST["export_csv_data"])) {
+    $csv_file = "gotogro_SalesReport.csv";
+	header("Content-Type: text/csv");
+	header("Content-Disposition: attachment; filename=\"$csv_file\"");
+
+    $fh = fopen('php://output', 'w');
+
+    $csv_header = array_map(function($inv_row) {
+        return $inv_row->inv_title;
+    }, $columns);
+    array_unshift($csv_header, 'Month/Year');
+    $csv_header[] = 'Total Sales';
+    fputcsv($fh, $csv_header);
+
+    foreach ($rows as $month_year_row) {
+        $csv_row = [$month_year_row->month_year];
+        foreach ($columns as $inv_row) {
+            $csv_row[] = isset($report[$month_year_row->month_year][$inv_row->inv_id])
+                ? $report[$month_year_row->month_year][$inv_row->inv_id]
+                : '0.00';
+        }
+        $csv_row[] = $month_year_row->total_sales;
+        fputcsv($fh, $csv_row);
+    }
+
+    fclose($fh);
+    exit;  
+}
 ?>
 
 
@@ -447,8 +505,7 @@ include 'export.php';
                             <tr>
                                 <th>Month/Year</th>
                                 <?php
-                                    $inventory_query = tep_query('SELECT `inv_title` FROM `inventory` ORDER BY `inv_id`');
-                                    while ($inventory_row = tep_fetch_object($inventory_query)) {
+                                    foreach ($columns as $inventory_row) {
                                         echo "<th>{$inventory_row->inv_title}</th>";
                                     }
                                 ?>
@@ -457,45 +514,18 @@ include 'export.php';
                         </thead>
                         <tbody id="monthly-sales-report">
                             <?php
-                                $query = tep_query(
-                                    'SELECT
-                                        CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
-                                        `inv_id`,
-                                        ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `sales`
-                                    FROM `sales` NATURAL JOIN `inventory`
-                                    WHERE `sales_status` = 2
-                                    GROUP BY `month_year`, `inv_id`;');
-                                while ($result = tep_fetch_object($query)) {
-                                    $report[$result->month_year][$result->inv_id] = $result->sales;
-                                }
-
-                                $inv_query = tep_query('SELECT `inv_id` FROM `inventory` ORDER BY `inv_id`');
-                                while ($inv_row = tep_fetch_object($inv_query)) {
-                                    $columns[] = $inv_row->inv_id;
-                                }
-
-                                $month_year_query = tep_query(
-                                    'SELECT
-                                        CONCAT(MONTHNAME(`sales_dateCreated`), " ", YEAR(`sales_dateCreated`)) AS `month_year`,
-                                        TIMESTAMPADD(MONTH, TIMESTAMPDIFF(MONTH, "1970-01-01", `sales_dateCreated`), "1970-01-01") AS `sales_month`,
-                                        ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `total_sales`
-                                    FROM `sales` NATURAL JOIN `inventory`
-                                    WHERE `sales_status` = 2
-                                    GROUP BY `month_year`
-                                    ORDER BY `sales_dateCreated`');
-                                while ($month_year_row = tep_fetch_object($month_year_query)) {
+                                foreach ($rows as $month_year_row) {
                                     echo "<tr data-sales_month=\"{$month_year_row->sales_month}\">";
                                     $row = $month_year_row->month_year;
                                     echo "<td>$row</td>";
-                                    foreach ($columns as $column) {
+                                    foreach ($columns as $inv_row) {
+                                        $column = $inv_row->inv_id;
                                         $sales = isset($report[$row][$column]) ? $report[$row][$column] : '0.00';
                                         echo "<td>RM $sales</td>";
                                     }
                                     echo "<td>RM {$month_year_row->total_sales}</td>";
                                     echo '</tr>';
                                 }
-
-                                
                             ?>
                         </tbody>
                     </table>
