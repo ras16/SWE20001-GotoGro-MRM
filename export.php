@@ -1,5 +1,13 @@
 <?php
+include_once("setup.php");
+$query = "SELECT * FROM sales ";
 
+
+$result = mysqli_query($conn, $query);
+$records = array();
+while( $rows = mysqli_fetch_assoc($result) ) {
+	$records[] = $rows;
+}	
 
 if(isset($_POST["export_csv_data"])) {	
 	$csv_file = "gotogro_SalesReport". ".csv";			

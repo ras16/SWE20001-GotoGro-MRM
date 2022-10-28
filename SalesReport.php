@@ -1,5 +1,6 @@
-<?php include 'setup.php'; 
-include("export.php");
+<?php 
+include 'setup.php'; 
+include 'export.php';
 ?>
 
 
