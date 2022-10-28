@@ -204,6 +204,19 @@ include 'export.php';
         .month-pickers {
             text-align: right;
         }
+
+        .button {
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 83px;
+            cursor: pointer;
+            background-color: #212F3C;
+}
     </style>
     <script>
         $(document).ready(function() {
@@ -494,7 +507,7 @@ include 'export.php';
 <div class="well-sm col-sm-12">
 		<div class="btn-group pull-right">	
 			<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">					
-				<button type="submit" id="export_csv_data" name='export_csv_data' value="Export to CSV" class="btn btn-info">Generate CSV file</button>
+				<button class="button button" type="submit" id="export_csv_data" name='export_csv_data' value="Export to CSV" class="btn btn-info">Generate CSV file</button>
 			</form>
 		</div>
 	</div>
