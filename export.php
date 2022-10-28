@@ -3,7 +3,19 @@ include_once("setup.php");
 $query = "SELECT * FROM sales ";
 
 
-$result = mysqli_query($conn, $query);
+$file_selected = 
+
+'SELECT CONCAT(MONTHNAME(`sales_dateCreated`), " ", 
+YEAR(`sales_dateCreated`)) AS `month_year`,
+`inv_title`, 
+ROUND(SUM(`inv_price` * `sales_qty`), 2) AS `sales`
+FROM `sales` NATURAL JOIN `inventory`
+WHERE `sales_status` = 2
+GROUP BY `month_year`
+ORDER BY `sales_dateCreated`';
+
+
+$result = mysqli_query($conn, $file_selected);
 $records = array();
 while( $rows = mysqli_fetch_assoc($result) ) {
 	$records[] = $rows;
