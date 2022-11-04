@@ -215,6 +215,7 @@
                     $query = tep_query(
                         'SELECT inv_title, SUM(inv_price * sales_qty) AS sales
                         FROM sales NATURAL JOIN inventory
+                        WHERE sales_status = 2
                         GROUP BY inv_id');
                     while ($infoRow = tep_fetch_object($query)) {
                         $data[] = ['inventory' => $infoRow->inv_title, 'sales' => $infoRow->sales];
@@ -323,6 +324,7 @@
                     $query = tep_query(
                         'SELECT inv_title, SUM(sales_qty) AS quantity
                         FROM sales NATURAL JOIN inventory
+                        WHERE sales_status = 2
                         GROUP BY inv_id');
                     while ($infoRow = tep_fetch_object($query)) {
                         $data[] = ['label' => $infoRow->inv_title, 'value' => $infoRow->quantity];
