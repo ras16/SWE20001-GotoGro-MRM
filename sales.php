@@ -579,7 +579,7 @@
                         </div>
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input type="text" class="form-control" name="sales_qty" required>
+                            <input type="number" class="form-control" name="sales_qty" required>
                         </div>
                         <div class="form-group">
                             <label>Receipt</label>
@@ -625,11 +625,11 @@
                         <input type="hidden" name="sales_id" class="get_sales_id">
                         <div class="form-group">
                             <label>Inventory ID</label>
-                            <input type="text" class="form-control get_inv_id" name="inv_id" readonly>
+                            <input type="number" class="form-control get_inv_id" name="inv_id" readonly>
                         </div>
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input type="text" class="form-control get_sales_qty" name="sales_qty" required>
+                            <input type="number" class="form-control get_sales_qty" name="sales_qty" required>
                         </div>
                         <div class="form-group">
                             <label>Receipt</label>
@@ -651,7 +651,7 @@
                         </div>
                         <div class="form-group">
                             <label>Member ID</label>
-                            <input type="text" class="form-control get_member_id" name="member_id" readonly>
+                            <input type="number" class="form-control get_member_id" name="member_id" readonly>
                         </div>
                     </div>
                     <div class="modal-footer">
