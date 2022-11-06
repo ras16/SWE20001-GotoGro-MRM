@@ -20,3 +20,5 @@ git clone https://github.com/ras16/SWE20001-GotoGro-MRM.git
 Next, create the database by executing the SQL file gotogro_mrm_db.sql.
 
 GotoGro-MRM website should now be accessible through http://localhost/SWE20001-GotoGro-MRM.
+
+This project is the effort of students of Swinburne University of Technology SWE20001 Managing Software Projects Group 5 AUG2022. Group members are Rasul Bayramdurdyyev, Jared Tan Rui Hoong, Nakshatramaalah R Thirukumar, Luwi Kah Wen, So Wai Ting.
