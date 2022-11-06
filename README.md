@@ -1,4 +1,5 @@
 # SWE20001-GotoGro-MRM
+This project is the effort of students of Swinburne University of Technology SWE20001 Managing Software Projects Group 5 AUG2022. Group members are Rasul Bayramdurdyyev, Jared Tan Rui Hoong, Nakshatramaalah R Thirukumar, Luwi Kah Wen, So Wai Ting.
 
 ## Background
 Goto Grocery is a member-based grocery store based in Hawthorn. The company offers quality grocery items for our members.
@@ -21,4 +22,3 @@ Next, create the database by executing the SQL file gotogro_mrm_db.sql.
 
 GotoGro-MRM website should now be accessible through http://localhost/SWE20001-GotoGro-MRM.
 
-This project is the effort of students of Swinburne University of Technology SWE20001 Managing Software Projects Group 5 AUG2022. Group members are Rasul Bayramdurdyyev, Jared Tan Rui Hoong, Nakshatramaalah R Thirukumar, Luwi Kah Wen, So Wai Ting.
